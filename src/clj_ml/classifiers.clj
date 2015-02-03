@@ -65,7 +65,7 @@
            (weka.core Instance Instances)
            (weka.classifiers.lazy IBk)
            (weka.classifiers.trees J48 RandomForest M5P)
-           (weka.classifiers.meta LogitBoost AdditiveRegression RotationForest)
+           (weka.classifiers.meta AdaBoostM1 LogitBoost AdditiveRegression RotationForest)
            (weka.classifiers.bayes NaiveBayes NaiveBayesUpdateable)
            (weka.classifiers.functions MultilayerPerceptron SMO LinearRegression Logistic PaceRegression SPegasos LibSVM)
            (weka.classifiers AbstractClassifier Classifier Evaluation)))
@@ -216,6 +216,20 @@
                                {:threshold "-S"
                                 :num-iterations "-I"
                                 :weak-learning-class "-W"}))))
+
+(defmethod make-classifier-options [:decision-tree :adaboosted-stump]
+  ([kind algorithm m]
+     (->> (check-options m {:debug "-D"
+                            :resampling "-Q"})
+          (check-option-values m
+                               {:weak-learning-class "-W"
+                                :num-iterations "-I"
+                                :random-seed "-S"
+                                :percentage-weight-mass "-P"
+                                :folds-for-cross-validation "-F"
+                                :runs-for-cross-validation "-R"
+                                :log-likelihood-improvement-threshold "-L"
+                                :shrinkage-parameter "-H"}))))
 
 (defmethod make-classifier-options [:decision-tree :boosted-stump]
   ([kind algorithm m]
@@ -513,6 +527,10 @@
 (defmethod make-classifier [:regression :pace]
   ([kind algorithm & options]
      (make-classifier-with kind algorithm PaceRegression options)))
+
+(defmethod make-classifier [:decision-tree :adaboosted-stump]
+  ([kind algorithm & options]
+     (make-classifier-with kind algorithm AdaBoostM1 options)))
 
 (defmethod make-classifier [:regression :boosted-regression]
   ([kind algorithm & options]
