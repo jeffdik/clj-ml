@@ -135,7 +135,8 @@
                                 :tolerance "-L"
                                 :epsilon-roundoff "-P"
                                 :folds-for-cross-validation "-V"
-                                :random-seed "-W"}))))
+                                :random-seed "-W"
+                                :kernel-type "-K"}))))
 
 (defmethod make-classifier-options [:support-vector-machine :spegasos]
   ([kind algorithm m]
